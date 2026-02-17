@@ -11,6 +11,10 @@ const specialElite = Special_Elite({
 export const metadata: Metadata = {
   title: "U Sol e a Lua",
   description: "U-Sol-13 Campaign Hub",
+  icons: {
+    icon: "/sunsoul-clean.png",
+    apple: "/sunsoul-clean.png",
+  },
 };
 
 export default function RootLayout({

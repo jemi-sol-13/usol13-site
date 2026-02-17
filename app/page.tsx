@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 const PLAYERS: Record<string, { password: string; name: string }> = {
-  "@dr.sawing.your.bones": { password: "sinclairsimp101", name: "Dr. Sawbone" },
+  "@dr.saw.your.bone": { password: "Northstar", name: "Dr. Sawbone" },
   "@sinning.the.clair": { password: "rorysimp9000", name: "Red Wraith" },
-  "@iota.hater101": { password: "remindertoupdatepw", name: "Alexei" },
+  "@atomatics": { password: "k4rd35h3vscale", name: "Alexei" },
   "@sai50001": { password: "rememberourpromise", name: "50001" },
 };
 
@@ -44,11 +44,30 @@ const HACK_LINES = [
   "> ACCESS GRANTED.",
 ];
 
+function EyeIcon({ open }: { open: boolean }) {
+  if (open) {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    );
+  }
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+  );
+}
+
 export default function Home() {
   const [displayedText, setDisplayedText] = useState("");
   const [phase, setPhase] = useState("login" as "login" | "fisheye" | "tvnoise" | "hacking" | "welcome" | "menu");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [playerName, setPlayerName] = useState("");
   const [hackLines, setHackLines] = useState<string[]>([]);
@@ -209,7 +228,7 @@ export default function Home() {
 
   return (
     <div
-      className={`min-h-screen bg-black flex flex-col items-center justify-center gap-8 font-[family-name:var(--font-typewriter)] ${
+      className={`min-h-screen bg-black flex flex-col items-center justify-center gap-6 font-[family-name:var(--font-typewriter)] ${
         phase === "fisheye" ? "animate-fisheye" : ""
       }`}
     >
@@ -226,26 +245,35 @@ export default function Home() {
         <span className="animate-pulse">|</span>
       </h1>
 
-      <div className="flex flex-col gap-4 mt-4 w-72">
+      <div className="flex flex-col items-center gap-5 mt-4 w-96">
         <input
           type="text"
           placeholder="USERNAME"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="bg-transparent border border-white/50 rounded-lg px-4 py-3 text-white text-center tracking-wider focus:outline-none focus:border-white focus:shadow-[0_0_10px_rgba(255,255,255,0.3)] transition-all duration-300"
+          className="w-full bg-transparent border border-white/50 rounded-lg px-4 py-2 text-white text-center text-sm tracking-wider focus:outline-none focus:border-white focus:shadow-[0_0_10px_rgba(255,255,255,0.3)] transition-all duration-300"
         />
-        <input
-          type="password"
-          placeholder="PASSKEY"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className="bg-transparent border border-white/50 rounded-lg px-4 py-3 text-white text-center tracking-wider focus:outline-none focus:border-white focus:shadow-[0_0_10px_rgba(255,255,255,0.3)] transition-all duration-300"
-        />
+        <div className="relative w-full">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="PASSKEY"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="w-full bg-transparent border border-white/50 rounded-lg px-4 py-2 text-white text-center text-sm tracking-wider focus:outline-none focus:border-white focus:shadow-[0_0_10px_rgba(255,255,255,0.3)] transition-all duration-300"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute -right-8 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors duration-200"
+          >
+            <EyeIcon open={showPassword} />
+          </button>
+        </div>
         <button
           onClick={handleLogin}
-          className="border border-white rounded-lg bg-transparent text-white px-6 py-3 shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] hover:bg-white/10 transition-all duration-300 tracking-widest mt-2"
+          className="border border-white rounded-lg bg-transparent text-white px-12 py-2 shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] hover:bg-white/10 transition-all duration-300 tracking-widest text-sm mt-2"
         >
           ENTER
         </button>
