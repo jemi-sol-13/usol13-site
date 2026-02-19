@@ -1,12 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { supabase } from "@/app/supabaseClient";
 
 export default function VielaDossier() {
   const router = useRouter();
   const [notes, setNotes] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadNotes() {
+      const { data } = await supabase
+        .from("notes")
+        .select("content")
+        .eq("npc_id", "viela")
+        .single();
+      if (data) setNotes(data.content);
+    }
+    loadNotes();
+  }, []);
+
+  async function saveNotes() {
+    setSaving(true);
+    await supabase
+      .from("notes")
+      .update({ content: notes, updated_at: new Date().toISOString() })
+      .eq("npc_id", "viela");
+    setSaving(false);
+    setLastSaved(new Date().toLocaleTimeString());
+  }
 
   return (
     <div className="min-h-screen bg-black flex flex-col font-[family-name:var(--font-typewriter)]">
@@ -118,6 +143,18 @@ export default function VielaDossier() {
               placeholder="Enter your notes here..."
               className="w-full h-32 bg-white/5 border border-white/20 rounded-lg p-4 text-white text-sm tracking-wider resize-none focus:outline-none focus:border-white/50 focus:shadow-[0_0_10px_rgba(255,255,255,0.1)] transition-all duration-300 placeholder:text-white/20"
             />
+            <div className="flex items-center gap-4 mt-3">
+              <button
+                onClick={saveNotes}
+                disabled={saving}
+                className="border border-white/50 rounded-lg bg-transparent text-white px-6 py-2 text-xs tracking-widest hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:bg-white/10 transition-all duration-300 disabled:opacity-30"
+              >
+                {saving ? "SAVING..." : "SAVE NOTES"}
+              </button>
+              {lastSaved && (
+                <span className="text-white/30 text-xs">Last saved at {lastSaved}</span>
+              )}
+            </div>
           </div>
 
           {/* CLASSIFIED */}

@@ -21,10 +21,10 @@ const members = [
   },
   {
     id: "jules",
-    name: "???",
-    role: "???",
-    portrait: null,
-    locked: true,
+    name: "JULES GALLAGHER",
+    role: "Bartender",
+    portrait: "/jules-portrait.png",
+    locked: false,
   },
 ];
 

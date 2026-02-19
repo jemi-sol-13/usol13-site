@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const PLAYERS: Record<string, { password: string; name: string }> = {
   "@dr.saw.your.bone": { password: "Northstar", name: "Dr. Sawbone" },
-  "@sinning.the.clair": { password: "rorysimp9000", name: "Red Wraith" },
+  "@maestro": { password: "goldhand", name: "Red Wraith" },
   "@atomatics": { password: "k4rd35h3vscale", name: "Alexei" },
   "@sai50001": { password: "rememberourpromise", name: "50001" },
 };
