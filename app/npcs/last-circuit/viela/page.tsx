@@ -5,6 +5,30 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/app/supabaseClient";
 
+function SectionHeader({ label, color = "white" }: { label: string; color?: "white" | "red" }) {
+  const lineColor = color === "red" ? "via-red-500/40" : "via-white/30";
+  const textColor = color === "red" ? "text-red-500/80" : "text-white/50";
+
+  return (
+    <div className="flex items-center gap-4 mb-5">
+      <div className={`flex-1 h-[1px] bg-gradient-to-r from-transparent ${lineColor} to-transparent`} />
+      <p className={`${textColor} text-xs tracking-[0.3em] flex-shrink-0`}>
+        {label}
+      </p>
+      <div className={`flex-1 h-[1px] bg-gradient-to-r from-transparent ${lineColor} to-transparent`} />
+    </div>
+  );
+}
+
+function InfoRow({ label, children, labelColor = "text-white/40" }: { label: string; children: React.ReactNode; labelColor?: string }) {
+  return (
+    <>
+      <span className={`${labelColor} text-sm tracking-wider`}>{label}</span>
+      <span className="text-white/90 text-sm leading-relaxed">{children}</span>
+    </>
+  );
+}
+
 export default function VielaDossier() {
   const router = useRouter();
   const [notes, setNotes] = useState("");
@@ -34,20 +58,56 @@ export default function VielaDossier() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex flex-col font-[family-name:var(--font-typewriter)]">
-      <div className="p-8">
+    <div className="min-h-screen bg-black flex flex-col font-[family-name:var(--font-typewriter)] relative overflow-hidden">
+      {/* Background grid */}
+      <div
+        className="absolute inset-0 opacity-[0.02] pointer-events-none"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      {/* Scanline */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute left-0 w-full h-[1px] bg-white/[0.03] animate-scanline" />
+      </div>
+
+      {/* Top bar */}
+      <div className="flex justify-between items-center px-8 py-4 z-10">
         <button
           onClick={() => router.push("/npcs/last-circuit")}
-          className="text-white/50 hover:text-white transition-colors duration-200 text-sm tracking-wider"
+          className="text-white/60 hover:text-white transition-colors duration-200 text-sm tracking-wider"
         >
           ← FENMOORE&apos;S BAR
         </button>
+        <div className="flex items-center gap-3">
+          <div className="w-2 h-2 bg-green-400/80 rounded-full shadow-[0_0_8px_rgba(0,255,0,0.4)]" />
+          <span className="text-white/40 text-[10px] tracking-widest">DOSSIER ACTIVE</span>
+        </div>
       </div>
 
-      <div className="flex flex-1 px-8 pb-8 gap-8">
-        {/* LEFT SIDE — Portrait */}
+      {/* Main content */}
+      <div className="flex px-8 gap-8 flex-1 z-10">
+        {/* LEFT — Portrait */}
         <div className="w-1/4 flex-shrink-0">
-          <div className="w-full h-full min-h-[600px] border border-white/30 rounded-lg overflow-hidden relative">
+          <div className="w-full h-full min-h-[600px] border border-white/20 rounded-lg overflow-hidden relative">
+            {/* Corner accents */}
+            <div className="absolute top-2 left-2 w-3 h-[1px] bg-white/40 z-10" />
+            <div className="absolute top-2 left-2 w-[1px] h-3 bg-white/40 z-10" />
+            <div className="absolute top-2 right-2 w-3 h-[1px] bg-white/40 z-10" />
+            <div className="absolute top-2 right-2 w-[1px] h-3 bg-white/40 z-10" />
+            <div className="absolute bottom-2 left-2 w-3 h-[1px] bg-white/40 z-10" />
+            <div className="absolute bottom-2 left-2 w-[1px] h-3 bg-white/40 z-10" />
+            <div className="absolute bottom-2 right-2 w-3 h-[1px] bg-white/40 z-10" />
+            <div className="absolute bottom-2 right-2 w-[1px] h-3 bg-white/40 z-10" />
+
+            {/* Top accent line */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent z-10" />
+
             <Image
               src="/viela-portrait.jpg"
               alt="Viela Hlow-Byorn"
@@ -57,120 +117,114 @@ export default function VielaDossier() {
           </div>
         </div>
 
-        {/* RIGHT SIDE — Dossier */}
+        {/* RIGHT — Dossier data */}
         <div className="flex-1 flex flex-col gap-8 overflow-y-auto">
+          {/* Header */}
+          <div>
+            <p className="text-white/30 text-[10px] tracking-[0.5em] mb-2">MEMBER #01 — THE LAST CIRCUIT</p>
+            <h1 className="text-white text-2xl tracking-[0.3em] drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">
+              VIELA HLOW-BYORN
+            </h1>
+            <p className="text-white/40 text-xs tracking-widest mt-1">&quot;BUTTERFLY&quot;</p>
+          </div>
+
           {/* BIODATA */}
           <div>
-            <h2 className="text-white/40 text-xs tracking-[0.3em] mb-4 border-b border-white/20 pb-2">
-              ─── BIODATA ───
-            </h2>
+            <SectionHeader label="BIODATA" />
             <div className="grid grid-cols-[140px_1fr] gap-y-3 gap-x-4">
-              <span className="text-white/50 text-sm">NAME</span>
-              <span className="text-white text-sm">Viela Hlow-Byorn</span>
-
-              <span className="text-white/50 text-sm">ALIAS</span>
-              <span className="text-white text-sm">Butterfly</span>
-
-              <span className="text-white/50 text-sm">OCCUPATION</span>
-              <span className="text-white text-sm">Security Guard / Cyber-Security Mercenary</span>
-
-              <span className="text-white/50 text-sm">AFFILIATION</span>
-              <span className="text-white text-sm">The Last Circuit: Fenmoore&apos;s Bar</span>
-
-              <span className="text-white/50 text-sm">SPECIES</span>
-              <span className="text-white text-sm">Anthropomorphic Moth Variant</span>
+              <InfoRow label="NAME">Viela Hlow-Byorn</InfoRow>
+              <InfoRow label="ALIAS">Butterfly</InfoRow>
+              <InfoRow label="OCCUPATION">Security Guard / Cyber-Security Mercenary</InfoRow>
+              <InfoRow label="AFFILIATION">The Last Circuit: Fenmoore&apos;s Bar</InfoRow>
+              <InfoRow label="SPECIES">Anthropomorphic Moth Variant</InfoRow>
             </div>
           </div>
 
           {/* PHYSICAL PROFILE */}
           <div>
-            <h2 className="text-white/40 text-xs tracking-[0.3em] mb-4 border-b border-white/20 pb-2">
-              ─── PHYSICAL PROFILE ───
-            </h2>
+            <SectionHeader label="PHYSICAL PROFILE" />
             <div className="grid grid-cols-[140px_1fr] gap-y-3 gap-x-4">
-              <span className="text-white/50 text-sm">AGE</span>
-              <span className="text-red-500 text-sm drop-shadow-[0_0_5px_rgba(255,0,0,0.5)]">[DISCLOSED]</span>
-
-              <span className="text-white/50 text-sm">DESCRIPTION</span>
-              <span className="text-white text-sm">Strong built, pale blond hair, mechanical left leg covering from lower thigh</span>
+              <InfoRow label="AGE">
+                <span className="text-red-500/80 drop-shadow-[0_0_5px_rgba(255,0,0,0.4)]">[UNDISCLOSED]</span>
+              </InfoRow>
+              <InfoRow label="DESCRIPTION">Strong built, Pale blond hair, Mechanical left leg covering from lower thigh</InfoRow>
             </div>
           </div>
 
           {/* PERSONAL INTEL */}
           <div>
-            <h2 className="text-white/40 text-xs tracking-[0.3em] mb-4 border-b border-white/20 pb-2">
-              ─── PERSONAL INTEL ───
-            </h2>
+            <SectionHeader label="PERSONAL INTEL" />
             <div className="grid grid-cols-[140px_1fr] gap-y-3 gap-x-4">
-              <span className="text-white/50 text-sm">PERSONALITY</span>
-              <span className="text-white text-sm leading-relaxed">
+              <InfoRow label="PERSONALITY">
                 Known to be the muscles of the group, Viela is the frontliner who no one would&apos;ve expected. In a world where patriarchy exists, she defies all rules and prevents any casualty from happening... well at the very least on a minimal scale. Agile, Impactful, and Bashful is what others would like to call her... especially her enemies.
-              </span>
-
-              <span className="text-white/50 text-sm">SEXUALITY</span>
-              <span className="text-white text-sm">Bisexual w/ strong preference of women. (Don&apos;t ask her why)</span>
-
-              <span className="text-white/50 text-sm">KNOWN ASSOCIATES</span>
-              <span className="text-white text-sm">Last Circuit, The Cunninghams, Apollo 11</span>
-
-              <span className="text-white/50 text-sm">BACKGROUND</span>
-              <span className="text-red-500 text-sm drop-shadow-[0_0_5px_rgba(255,0,0,0.5)]">[DISCLOSED]</span>
+              </InfoRow>
+              <InfoRow label="SEXUALITY">Bisexual w/ strong preference of women. (Don&apos;t ask her why)</InfoRow>
+              <InfoRow label="KNOWN ASSOCIATES">Last Circuit, The Cunninghams, Apollo 11</InfoRow>
+              <InfoRow label="BACKGROUND">
+                <span className="text-red-500/80 drop-shadow-[0_0_5px_rgba(255,0,0,0.4)]">[UNDISCLOSED]</span>
+              </InfoRow>
             </div>
           </div>
 
           {/* CURRENT CAMPAIGN */}
           <div>
-            <h2 className="text-white/40 text-xs tracking-[0.3em] mb-4 border-b border-white/20 pb-2">
-              ─── CURRENT CAMPAIGN ───
-            </h2>
+            <SectionHeader label="CURRENT CAMPAIGN" />
             <div className="grid grid-cols-[140px_1fr] gap-y-3 gap-x-4">
-              <span className="text-white/50 text-sm">STATUS</span>
-              <span className="text-green-400 text-sm drop-shadow-[0_0_5px_rgba(0,255,0,0.4)]">ALIVE</span>
-
-              <span className="text-white/50 text-sm">LAST SEEN</span>
-              <span className="text-white text-sm">Southern Atmosphere | City Clouds | 1:32 A.M — before immediate disappearance</span>
+              <InfoRow label="STATUS">
+                <span className="text-green-400/90 drop-shadow-[0_0_8px_rgba(0,255,0,0.4)]">ALIVE</span>
+              </InfoRow>
+              <InfoRow label="LAST SEEN">Southern Atmosphere | City Clouds | 1:32 A.M — Before Immediate Disappearance</InfoRow>
             </div>
           </div>
 
           {/* NOTES */}
           <div>
-            <h2 className="text-white/40 text-xs tracking-[0.3em] mb-4 border-b border-white/20 pb-2">
-              ─── NOTES ───
-            </h2>
+            <SectionHeader label="NOTES" />
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Enter your notes here..."
-              className="w-full h-32 bg-white/5 border border-white/20 rounded-lg p-4 text-white text-sm tracking-wider resize-none focus:outline-none focus:border-white/50 focus:shadow-[0_0_10px_rgba(255,255,255,0.1)] transition-all duration-300 placeholder:text-white/20"
+              className="w-full h-32 bg-white/[0.04] border border-white/15 rounded-lg p-4 text-white/80 text-sm tracking-wider resize-none focus:outline-none focus:border-white/40 focus:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all duration-300 placeholder:text-white/15"
             />
             <div className="flex items-center gap-4 mt-3">
               <button
                 onClick={saveNotes}
                 disabled={saving}
-                className="border border-white/50 rounded-lg bg-transparent text-white px-6 py-2 text-xs tracking-widest hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:bg-white/10 transition-all duration-300 disabled:opacity-30"
+                className="border border-white/30 rounded-lg bg-transparent text-white/70 px-6 py-2 text-xs tracking-widest hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:bg-white/5 hover:text-white transition-all duration-300 disabled:opacity-30"
               >
                 {saving ? "SAVING..." : "SAVE NOTES"}
               </button>
               {lastSaved && (
-                <span className="text-white/30 text-xs">Last saved at {lastSaved}</span>
+                <span className="text-white/30 text-xs tracking-wider">Last saved at {lastSaved}</span>
               )}
             </div>
           </div>
 
           {/* CLASSIFIED */}
-          <div className="border-2 border-red-500/50 rounded-lg p-6 shadow-[0_0_20px_rgba(255,0,0,0.2)]">
-            <h2 className="text-red-500 text-xs tracking-[0.3em] mb-4 border-b border-red-500/30 pb-2 drop-shadow-[0_0_10px_rgba(255,0,0,0.8)]">
-              ─── CLASSIFIED ───
-            </h2>
+          <div className="border border-red-500/30 rounded-lg p-6 relative overflow-hidden mb-8">
+            {/* Top accent */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/60 to-transparent" />
+
+            {/* Corner accents */}
+            <div className="absolute top-3 left-3 w-2 h-[1px] bg-red-500/50" />
+            <div className="absolute top-3 left-3 w-[1px] h-2 bg-red-500/50" />
+            <div className="absolute top-3 right-3 w-2 h-[1px] bg-red-500/50" />
+            <div className="absolute top-3 right-3 w-[1px] h-2 bg-red-500/50" />
+            <div className="absolute bottom-3 left-3 w-2 h-[1px] bg-red-500/50" />
+            <div className="absolute bottom-3 left-3 w-[1px] h-2 bg-red-500/50" />
+            <div className="absolute bottom-3 right-3 w-2 h-[1px] bg-red-500/50" />
+            <div className="absolute bottom-3 right-3 w-[1px] h-2 bg-red-500/50" />
+
+            <SectionHeader label="CLASSIFIED" color="red" />
             <div className="grid grid-cols-[140px_1fr] gap-y-3 gap-x-4">
-              <span className="text-red-500/70 text-sm">THREAT LEVEL</span>
-              <span className="text-red-500 text-lg font-bold drop-shadow-[0_0_15px_rgba(255,0,0,0.8)]">54%</span>
+              <span className="text-red-500/60 text-sm tracking-wider">THREAT LEVEL</span>
+              <span className="text-red-500 text-xl font-bold drop-shadow-[0_0_15px_rgba(255,0,0,0.6)]">54%</span>
 
-              <span className="text-red-500/70 text-sm">ARCANE PROWESS</span>
-              <span className="text-white text-sm">Butterfly Shapeshift, Superhuman Strength, 360 Vision</span>
+              <span className="text-red-500/60 text-sm tracking-wider">ARCANE PROWESS</span>
+              <span className="text-white/90 text-sm">Butterfly Shapeshift, Superhuman Strength, 360 Vision</span>
 
-              <span className="text-red-500/70 text-sm">WARRANTS</span>
-              <span className="text-white text-sm">Arson of Government Property, Mass Murder, Illegal Trading</span>
+              <span className="text-red-500/60 text-sm tracking-wider">WARRANTS</span>
+              <span className="text-white/90 text-sm">Arson of Government Property, Mass Murder, Illegal Trading</span>
             </div>
           </div>
         </div>
