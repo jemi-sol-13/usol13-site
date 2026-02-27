@@ -60,15 +60,8 @@ export default function Database() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black flex flex-col p-8 font-[family-name:var(--font-typewriter)] relative">
+    <div className="min-h-screen bg-black flex flex-col p-8 pt-20 font-[family-name:var(--font-typewriter)] relative">
       <ScanLine />
-
-      <button
-        onClick={() => router.push("/menu")}
-        className="text-white/50 hover:text-white transition-colors duration-200 text-sm tracking-wider mb-12 self-start z-10"
-      >
-        ← MAIN MENU
-      </button>
 
       {/* Header */}
       <div className="text-center mb-16 z-10">
@@ -98,7 +91,7 @@ export default function Database() {
           {reports.map((report, index) => (
             <button
               key={report.id}
-              onClick={() => router.push(`/database/${report.slug}`)}
+              onClick={() => router.push(`/database/reports/${report.slug}`)}
               className={`w-full text-left p-5 rounded-lg border transition-all duration-300 group relative overflow-hidden ${
                 report.solved
                   ? "border-white/20 hover:border-white/50 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:bg-white/5"
