@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import { Special_Elite } from "next/font/google";
+import { Orbitron } from "next/font/google";
 import "./globals.css";
 
 const specialElite = Special_Elite({
   variable: "--font-typewriter",
   weight: "400",
   subsets: ["latin"],
+});
+
+const orbitron = Orbitron({
+  variable: "--font-cyber",
+  subsets: ["latin"],
+  weight: ["400", "700", "900"],
 });
 
 export const metadata: Metadata = {
@@ -24,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${specialElite.variable} antialiased`}>
+      <body className={`${specialElite.variable} ${orbitron.variable} antialiased`}>
         {children}
       </body>
     </html>

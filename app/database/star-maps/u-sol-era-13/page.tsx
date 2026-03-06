@@ -510,28 +510,34 @@ export default function USolEra13Page() {
                   }}
                 >
                   {/* NEON planet name — only on click */}
-                  {isSelected && planetTextVisible && (
+                  {isSelected && (
                     <div
-                      className="absolute inset-0 flex flex-col items-center z-10"
+                      className="absolute inset-0 flex flex-col items-center z-10 pointer-events-none"
                       style={{
-                        paddingTop: `${PLANET_SIZE * 0.35}px`,
+                        paddingTop: `${PLANET_SIZE * 0.12}px`,
                       }}
                     >
                       <p
-                        className="text-[13px] tracking-[0.5em] uppercase mb-2 animate-fadeIn"
+                        className="text-[14px] tracking-[0.6em] uppercase mb-3 font-[family-name:var(--font-cyber)] font-normal animate-fadeIn"
                         style={{
                           color: planet.color,
-                          textShadow: `0 0 10px ${planet.color}, 0 0 20px ${planet.glowColor}`,
+                          opacity: 0.6,
+                          textShadow: `0 0 10px ${planet.color}, 0 0 30px ${planet.glowColor}`,
                         }}
                       >
                         {planet.unlocked ? "PLANET" : "CLASSIFIED"}
                       </p>
                       <h2
-                        className="text-6xl tracking-[0.6em] uppercase animate-fadeIn font-bold"
+                        className="text-7xl tracking-[0.15em] uppercase animate-fadeIn font-[family-name:var(--font-cyber)] font-black"
                         style={{
                           color: planet.color,
                           animationDelay: "0.1s",
-                          textShadow: `0 0 20px ${planet.color}, 0 0 60px ${planet.glowColor}, 0 0 100px ${planet.glowColor}`,
+                          textShadow: `
+                            0 0 20px ${planet.color},
+                            0 0 60px ${planet.glowColor},
+                            0 0 120px ${planet.glowColor},
+                            0 0 200px ${planet.glowColor}
+                          `,
                         }}
                       >
                         {planet.unlocked ? planet.name : "???"}
